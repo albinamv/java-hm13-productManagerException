@@ -38,6 +38,7 @@ class RepositoryTest {
         assertArrayEquals(expected, actual);
     }
 
+    // проверяе успешность добавления элемента
     @Test
     public void shouldAddDifferentProducts() {
         repository.add(first);
@@ -49,15 +50,15 @@ class RepositoryTest {
         assertArrayEquals(expected, actual);
     }
 
+    // исправленный тест
+    // проверяет генерацию AlreadyExistsException при попытке добавить элемент с повторяющимся id
     @Test
-    public void shouldNotAddDuplicateIds() {
-        repository.add(first);
+    public void shouldThrowExceptionWhileAddingDuplicateIds() {
         repository.add(first);
 
-        Product[] expected = {first};
-        Product[] actual = repository.findAll();
-
-        assertArrayEquals(expected, actual);
+        assertThrows(AlreadyExistsException.class, () -> {
+            repository.add(first);
+        });
     }
 
     // проверка успешности удаления существующего элемента
@@ -96,19 +97,4 @@ class RepositoryTest {
         });
     }
 
-    @Test
-    public void shouldContainId() {
-        repository.add(first);
-        repository.add(third);
-
-        assertTrue(repository.containsId(3));
-    }
-
-    @Test
-    public void shouldNotContainId() {
-        repository.add(first);
-        repository.add(third);
-
-        assertFalse(repository.containsId(50));
-    }
 }

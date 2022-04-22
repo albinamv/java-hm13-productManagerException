@@ -13,8 +13,8 @@ public class Repository {
     }
 
     public void add(Product product) {
-        if (containsId(product.getId())) {
-            return;
+        if (findById(product.getId()) != null) {
+            throw new AlreadyExistsException("Нельзя добавить товар с id " + product.getId() + ", т.к. такой id уже существует");
         } else {
             int length = products.length + 1;
             Product[] tmp = new Product[length];
@@ -28,8 +28,7 @@ public class Repository {
     }
 
     public void removeById(int id) {
-        Product removeItem = findById(id);
-        if (removeItem == null) {
+        if (findById(id) == null) {
             throw new NotFoundException("Не найден товар с id " + id);
         } else {
             int length = products.length - 1;
@@ -43,15 +42,6 @@ public class Repository {
             }
             products = tmp;
         }
-    }
-
-    public boolean containsId(int id) {
-        for (Product product : products) {
-            if (product.getId() == id) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public Product findById(int id) {
