@@ -60,6 +60,7 @@ class RepositoryTest {
         assertArrayEquals(expected, actual);
     }
 
+    // проверка успешности удаления существующего элемента
     @Test
     public void shouldRemoveById() {
         repository.add(first);
@@ -84,15 +85,15 @@ class RepositoryTest {
         assertArrayEquals(expected, actual);
     }
 
+    // исправленный тест
+    // проверка генерации NotFoundException при попытке удаления несуществующего элемента
     @Test
-    public void shouldNotFailIfNoId() {
+    public void shouldThrowExceptionIfNoId() {
         repository.add(second);
-        repository.removeById(1);
 
-        Product[] expected = {second};
-        Product[] actual = repository.findAll();
-
-        assertArrayEquals(expected, actual);
+        assertThrows(NotFoundException.class, () -> {
+            repository.removeById(50);
+        });
     }
 
     @Test
